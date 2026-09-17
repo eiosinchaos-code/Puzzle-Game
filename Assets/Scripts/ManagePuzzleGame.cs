@@ -1,90 +1,227 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class ManagePuzzleGame : MonoBehaviour
 {
-    float timer; 
-    bool cardsShuffled = false;
     public Image piece;
     public Image placeHolder;
-    float phWidth, phHeight;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() 
-    { 
-        CreatePlaceHolders(); 
+    [Header("Hint System")]
+    [SerializeField] private GameObject hintOverlay;
+    [SerializeField] private Image hintOverlayImage;
+    [SerializeField] private Button hintButton;
+
+    private float timer;
+    private bool cardsShuffled = false;
+    public bool isSetupComplete { get; private set; } = false;
+
+    [Header("Grid Layout Settings")]
+    [SerializeField] private float totalAreaWidth = 400f;  // Total width available for grid
+    [SerializeField] private float totalAreaHeight = 400f; // Total height available for grid
+
+    private float phWidth;
+    private float phHeight;
+
+    private int nbRows = 5;
+    private int nbColumns = 5;
+    private int totalPieces;
+    private int correctlyPlacedPieces = 0;
+    private string selectedPictureName = "lion";
+
+    void Start()
+    {
+        if (GameSettings.Instance != null)
+        {
+            nbRows = GameSettings.Instance.gridRows;
+            nbColumns = GameSettings.Instance.gridCols;
+            selectedPictureName = GameSettings.Instance.selectedPictureName;
+        }
+
+        totalPieces = nbRows * nbColumns;
+
+        // Dynamically calculate piece size based on grid density
+        phWidth = totalAreaWidth / nbColumns;
+        phHeight = totalAreaHeight / nbRows;
+
+        // Load Hint Image (Loads Texture2D first to ensure full picture renders even if sliced)
+        if (hintOverlayImage != null)
+        {
+            Texture2D fullTexture = Resources.Load<Texture2D>(selectedPictureName);
+            if (fullTexture == null)
+            {
+                fullTexture = Resources.Load<Texture2D>(selectedPictureName + "/" + selectedPictureName);
+            }
+            if (fullTexture == null)
+            {
+                fullTexture = Resources.Load<Texture2D>(selectedPictureName + " - copy");
+            }
+
+            if (fullTexture != null)
+            {
+                // Reconstruct full sprite from entire texture dimensions
+                Sprite fullSprite = Sprite.Create(
+                    fullTexture,
+                    new Rect(0, 0, fullTexture.width, fullTexture.height),
+                    new Vector2(0.5f, 0.5f)
+                );
+                hintOverlayImage.sprite = fullSprite;
+            }
+        }
+
+        if (hintOverlay != null)
+            hintOverlay.SetActive(false);
+
+        CreatePlaceHolders();
         CreatePieces();
-        //ShufflePieces();
     }
 
-    // Update is called once per frame
-    void Update() 
-    { 
-        timer += Time.deltaTime; 
-        if (timer >= 4 && !cardsShuffled) 
-        { 
-            ShufflePieces(); 
-            cardsShuffled = true; 
-        } 
+    void Update()
+    {
+        if (!cardsShuffled)
+        {
+            timer += Time.deltaTime;
+            if (timer >= 2f)
+            {
+                ShufflePieces();
+                cardsShuffled = true;
+                isSetupComplete = true;
+            }
+        }
     }
+
     public void CreatePlaceHolders()
     {
-        phWidth = 100; phHeight = 100;
-        float nbRows, nbColumns; nbRows = 5;
-        nbColumns = 5; for (int i = 0; i < 25; i++)
+        Vector3 centerPosition = GameObject.Find("rightSide").transform.position;
+        Transform canvasTransform = GameObject.Find("Canvas").transform;
+
+        for (int i = 0; i < totalPieces; i++)
         {
-            Vector3 centerPosition = new Vector3();
-            centerPosition = GameObject.Find("rightSide").transform.position;
-            float row, column; row = i % 5;
-            column = i / 5;
-            Vector3 phPosition = new Vector3(centerPosition.x + phWidth * (row - nbRows / 2), centerPosition.y - phHeight * (column - nbColumns / 2), centerPosition.z);
-            Image ph = (Image)(Instantiate(placeHolder, phPosition, Quaternion.identity));
-            ph.tag = "" + (i + 1); ph.name = "PH" + (i + 1); ph.transform.SetParent(GameObject.Find("Canvas").transform);
+            float row = i % nbColumns;
+            float column = i / nbColumns;
+
+            Vector3 phPosition = new Vector3(
+                centerPosition.x + phWidth * (row - (nbColumns - 1) / 2f),
+                centerPosition.y - phHeight * (column - (nbRows - 1) / 2f),
+                centerPosition.z
+            );
+
+            Image ph = Instantiate(placeHolder, phPosition, Quaternion.identity);
+            ph.name = "PH" + (i + 1);
+            ph.transform.SetParent(canvasTransform);
+
+            RectTransform rect = ph.GetComponent<RectTransform>();
+            if (rect != null) rect.sizeDelta = new Vector2(phWidth, phHeight);
+
+            PuzzleID puzzleID = ph.gameObject.GetComponent<PuzzleID>();
+            if (puzzleID == null) puzzleID = ph.gameObject.AddComponent<PuzzleID>();
+            puzzleID.id = i + 1;
         }
     }
-    public void CreatePieces() 
-    { 
-        phWidth = 100; 
-        phHeight = 100; 
-        float nbRows, nbColumns; 
-        nbRows = 5; 
-        nbColumns = 5;
-        for (int i = 0; i < 25; i++) 
-        { 
-            Vector3 centerPosition = new Vector3(); 
-            centerPosition = GameObject.Find("leftSide").transform.position; 
-            float row, column; row = i % 5; 
-            column = i / 5; 
-            Vector3 phPosition = new Vector3(centerPosition.x + phWidth * (row - nbRows / 2), centerPosition.y - phHeight * (column - nbColumns / 2), centerPosition.z); 
-            Image ph = (Image)(Instantiate(piece, phPosition, Quaternion.identity)); 
-            ph.tag = "" +(i + 1); ph.name = "Piece" +(i + 1); 
-            ph.transform.SetParent(GameObject.Find("Canvas").transform); 
-            Sprite[] allSprites = Resources.LoadAll<Sprite>("lion"); 
-            Sprite s1 = allSprites[i]; ph.GetComponent<Image>().sprite = s1;
+
+    public void CreatePieces()
+    {
+        Vector3 centerPosition = GameObject.Find("leftSide").transform.position;
+        Transform canvasTransform = GameObject.Find("Canvas").transform;
+
+        string resourcePath = selectedPictureName + "/" + selectedPictureName;
+        Sprite[] allSprites = Resources.LoadAll<Sprite>(resourcePath);
+
+        if (allSprites == null || allSprites.Length == 0)
+        {
+            allSprites = Resources.LoadAll<Sprite>(selectedPictureName);
+        }
+
+        for (int i = 0; i < totalPieces; i++)
+        {
+            float row = i % nbColumns;
+            float column = i / nbColumns;
+
+            Vector3 phPosition = new Vector3(
+                centerPosition.x + phWidth * (row - (nbColumns - 1) / 2f),
+                centerPosition.y - phHeight * (column - (nbRows - 1) / 2f),
+                centerPosition.z
+            );
+
+            Image ph = Instantiate(piece, phPosition, Quaternion.identity);
+            ph.name = "Piece" + (i + 1);
+            ph.transform.SetParent(canvasTransform);
+
+            RectTransform rect = ph.GetComponent<RectTransform>();
+            if (rect != null) rect.sizeDelta = new Vector2(phWidth, phHeight);
+
+            PuzzleID puzzleID = ph.gameObject.GetComponent<PuzzleID>();
+            if (puzzleID == null) puzzleID = ph.gameObject.AddComponent<PuzzleID>();
+            puzzleID.id = i + 1;
+
+            if (allSprites != null && i < allSprites.Length)
+            {
+                ph.GetComponent<Image>().sprite = allSprites[i];
+            }
         }
     }
+
     void ShufflePieces()
     {
-        int[] newArray = new int[25]; 
-        for (int i = 0; i < 25; i++) newArray[i] = i; 
-        int tmp; for (int t = 0; t < 25; t++) 
-        { 
-            tmp = newArray[t];
-            int r = Random.Range(t, 10);
+        int[] newArray = new int[totalPieces];
+        for (int i = 0; i < totalPieces; i++) newArray[i] = i;
+
+        for (int t = 0; t < totalPieces; t++)
+        {
+            int tmp = newArray[t];
+            int r = Random.Range(t, totalPieces);
             newArray[t] = newArray[r];
             newArray[r] = tmp;
         }
-        for (int i = 0; i < 25; i++) 
-        { 
-            float row, nbRows, nbColumns, column; nbRows = 5;
-            nbColumns = 5; row = (newArray[i]) % 5; 
-            column = (newArray[i]) / 5; 
-            Vector3 centerPosition = new Vector3();
-            centerPosition = GameObject.Find("leftSide").transform.position; 
-            var g = GameObject.Find("Piece"+(i + 1));
-            Vector3 newPosition = new Vector3(centerPosition.x + phWidth * (row - nbRows / 2), centerPosition.y - phHeight * (column - nbColumns / 2), centerPosition.z); 
-            g.transform.position = newPosition;
-            g.GetComponent<DragAndDrop>().InitCardPosition();
+
+        Vector3 centerPosition = GameObject.Find("leftSide").transform.position;
+
+        for (int i = 0; i < totalPieces; i++)
+        {
+            float row = newArray[i] % nbColumns;
+            float column = newArray[i] / nbColumns;
+
+            GameObject g = GameObject.Find("Piece" + (i + 1));
+            if (g != null)
+            {
+                Vector3 newPosition = new Vector3(
+                    centerPosition.x + phWidth * (row - (nbColumns - 1) / 2f),
+                    centerPosition.y - phHeight * (column - (nbRows - 1) / 2f),
+                    centerPosition.z
+                );
+
+                g.transform.position = newPosition;
+                g.GetComponent<DragAndDrop>()?.InitCardPosition();
+            }
+        }
+    }
+
+    public void ShowHint()
+    {
+        if (hintOverlay != null)
+        {
+            StartCoroutine(TriggerHintRoutine());
+        }
+    }
+
+    private IEnumerator TriggerHintRoutine()
+    {
+        hintOverlay.transform.SetAsLastSibling();
+        hintOverlay.SetActive(true);
+        if (hintButton != null) hintButton.interactable = false;
+
+        yield return new WaitForSeconds(5f);
+
+        hintOverlay.SetActive(false);
+        if (hintButton != null) hintButton.interactable = true;
+    }
+
+    public void OnPieceSnapped()
+    {
+        correctlyPlacedPieces++;
+        if (correctlyPlacedPieces >= totalPieces)
+        {
+            Object.FindAnyObjectByType<PuzzleGameController>()?.CompletePuzzle();
         }
     }
 }
-
