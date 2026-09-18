@@ -119,56 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &24454817
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 24454819}
-  - component: {fileID: 24454818}
-  m_Layer: 0
-  m_Name: exitscenecontroller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &24454818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24454817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e69ab24f29ebab4e89264629087fcaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExitSceneController
-  resultMessageText: {fileID: 110334670}
-  scoreText: {fileID: 1160833439}
-  highScoreText: {fileID: 1866013232}
-  saveScoreButton: {fileID: 1351704986}
-  playAgainButton: {fileID: 1639516292}
-  quitGameButton: {fileID: 1452250507}
---- !u!4 &24454819
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24454817}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 817.57837, y: 556.1269, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &110334668
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +405,7 @@ GameObject:
   - component: {fileID: 201521195}
   - component: {fileID: 201521194}
   - component: {fileID: 201521193}
+  - component: {fileID: 201521197}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -551,6 +502,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &201521197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201521192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76434c3260fce104a91b3977a8dde3de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExitUIController
+  resultMessage: {fileID: 110334670}
+  scoreText: {fileID: 1160833439}
+  highScoreText: {fileID: 1866013232}
+  settingsButton: {fileID: 1639516292}
+  quitButton: {fileID: 1452250507}
+  saveHighScoreButton: {fileID: 1351704986}
 --- !u!1 &271791345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1685,4 +1654,3 @@ SceneRoots:
   - {fileID: 1008347133}
   - {fileID: 201521196}
   - {fileID: 271791348}
-  - {fileID: 24454819}

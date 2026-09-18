@@ -3,62 +3,111 @@ using UnityEngine.EventSystems;
 
 public class DragAndDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private Vector3 initialPosition;
+    private Vector2 initialAnchoredPosition;
+    private Transform initialParent;
     private CanvasGroup canvasGroup;
     private bool isSnapped = false;
     private PuzzleID pieceID;
     private RectTransform rectTransform;
+    private Canvas canvas;
 
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        pieceID = GetComponent<PuzzleID>();
+
         rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+
+        // Fetch PuzzleID
+        pieceID = GetComponent<PuzzleID>();
     }
 
     public void InitCardPosition()
     {
-        initialPosition = transform.position;
+        initialAnchoredPosition = rectTransform.anchoredPosition;
+        initialParent = transform.parent;
+    }
+
+    private void Start()
+    {
+        if (initialParent == null)
+        {
+            InitCardPosition();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (isSnapped) return;
+
         canvasGroup.blocksRaycasts = false;
+        transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (isSnapped) return;
-        transform.position = Input.mousePosition;
+
+        Camera cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? eventData.pressEventCamera : null;
+
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, eventData.position, cam, out Vector3 worldPoint))
+        {
+            transform.position = worldPoint;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (isSnapped) return;
+
         canvasGroup.blocksRaycasts = true;
+
+        // Fallback check to prevent NullReferenceException if Awake didn't catch pieceID
+        if (pieceID == null)
+        {
+            pieceID = GetComponent<PuzzleID>();
+        }
+
+        if (pieceID == null)
+        {
+            Debug.LogError($"[DragAndDrop] Missing PuzzleID component on {gameObject.name}!");
+            ResetToStartPosition();
+            return;
+        }
 
         GameObject targetPH = GameObject.Find("PH" + pieceID.id);
 
         if (targetPH != null)
         {
-            float distance = Vector3.Distance(transform.position, targetPH.transform.position);
+            Camera cam = (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay) ? eventData.pressEventCamera : null;
 
-            // Distance tolerance scales with piece width
-            float tolerance = (rectTransform != null) ? (rectTransform.rect.width * 0.6f) : 50f;
+            Vector2 pieceScreenPos = RectTransformUtility.WorldToScreenPoint(cam, rectTransform.position);
+            Vector2 phScreenPos = RectTransformUtility.WorldToScreenPoint(cam, targetPH.transform.position);
 
-            if (distance < tolerance)
+            float distance = Vector2.Distance(pieceScreenPos, phScreenPos);
+            float snapThreshold = rectTransform.rect.width * (canvas != null ? canvas.scaleFactor : 1f) * 1.2f;
+
+            if (distance <= snapThreshold || Vector3.Distance(transform.position, targetPH.transform.position) < 100f)
             {
-                transform.position = targetPH.transform.position;
+                // Snap piece into placeholder container
+                transform.SetParent(targetPH.transform, false);
+                rectTransform.anchoredPosition = Vector2.zero;
+
                 isSnapped = true;
                 this.enabled = false;
 
-                Object.FindAnyObjectByType<ManagePuzzleGame>()?.OnPieceSnapped();
+                Object.FindAnyObjectByType<PuzzleGameplayManager>()?.OnPieceSnapped();
                 return;
             }
         }
 
-        transform.position = initialPosition;
+        ResetToStartPosition();
+    }
+
+    private void ResetToStartPosition()
+    {
+        transform.SetParent(initialParent, false);
+        rectTransform.anchoredPosition = initialAnchoredPosition;
     }
 }

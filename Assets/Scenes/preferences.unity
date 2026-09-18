@@ -223,7 +223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &315411960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: In Practice Mode you earn no bonus points for time.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -950,6 +950,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529869414}
   m_CullTransparentMesh: 1
+--- !u!1001 &629974288
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2193161867400522646, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 529.77045
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 666.8712
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5756785615786248558, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+--- !u!114 &629974289 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3377948975438718819, guid: ac768319d5112b34f81679ae9ee0fb93, type: 3}
+  m_PrefabInstance: {fileID: 629974288}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7703894a19922de42a4cb242727c821d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!1 &633288962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,9 +1400,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1604228485}
-        m_TargetAssemblyTypeName: PreferencesController, Assembly-CSharp
-        m_MethodName: SaveAndPlay
+      - m_Target: {fileID: 629974289}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SavePreferencesAndPlayFromScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1465,9 +1533,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1604228485}
-        m_TargetAssemblyTypeName: PreferencesController, Assembly-CSharp
-        m_MethodName: GoBackToStart
+      - m_Target: {fileID: 629974289}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GoToIntro
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1634,13 +1702,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 1207721302}
   m_HandleRect: {fileID: 414321030}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0
+  m_MinValue: 30
+  m_MaxValue: 1000
+  m_WholeNumbers: 1
+  m_Value: 30
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 629974289}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: UpdateTimerUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1076099450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,6 +1987,7 @@ GameObject:
   - component: {fileID: 1273982755}
   - component: {fileID: 1273982754}
   - component: {fileID: 1273982753}
+  - component: {fileID: 1273982757}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2005,6 +2086,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1273982757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273982752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9923d05baed73e84a9b281e80d401dd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PreferencesUIController
+  nameInput: {fileID: 1504736387}
+  pictureDropdown: {fileID: 1084290405}
+  timerSlider: {fileID: 1046497090}
+  timerText: {fileID: 2043470392}
+  practiceModeWarning: {fileID: 315411959}
+  saveAndPlayButton: {fileID: 885062885}
+  backButton: {fileID: 910556300}
 --- !u!1 &1275384006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2600,7 +2700,7 @@ GameObject:
   - component: {fileID: 1504736388}
   - component: {fileID: 1504736387}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: nameInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2801,55 +2901,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1604228484
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1604228486}
-  - component: {fileID: 1604228485}
-  m_Layer: 0
-  m_Name: PreferencesManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1604228485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604228484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc4275af006438b419f9bf2ebfe6bd6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PreferencesController
-  nameInput: {fileID: 1504736387}
-  pictureDropdown: {fileID: 1084290405}
-  timerSlider: {fileID: 1046497090}
-  timerTextLabel: {fileID: 2043470392}
-  practiceWarningText: {fileID: 315411960}
---- !u!4 &1604228486
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1604228484}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 908.12054, y: 627.1781, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1760191108
 GameObject:
   m_ObjectHideFlags: 0
@@ -3485,7 +3536,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 'Timer: 60s'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3512,7 +3563,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 42.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3564,4 +3615,4 @@ SceneRoots:
   - {fileID: 1760191111}
   - {fileID: 1273982756}
   - {fileID: 1793675941}
-  - {fileID: 1604228486}
+  - {fileID: 629974288}

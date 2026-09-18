@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1750088799563544563
+--- !u!1 &2193161867400522646
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5054260599352649280}
-  - component: {fileID: 6788126475633348938}
+  - component: {fileID: 5756785615786248558}
+  - component: {fileID: 3377948975438718819}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -17,37 +17,38 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5054260599352649280
+--- !u!4 &5756785615786248558
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750088799563544563}
+  m_GameObject: {fileID: 2193161867400522646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3393.933, y: 677.23596, z: 0}
+  m_LocalPosition: {x: 529.77045, y: 666.8712, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6788126475633348938
+--- !u!114 &3377948975438718819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750088799563544563}
+  m_GameObject: {fileID: 2193161867400522646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b14bb349ff8ade45aa8c127ed2826f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 7703894a19922de42a4cb242727c821d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameSettings
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerName: Player
   selectedPictureName: lion
   gridRows: 5
   gridCols: 5
   timeLimit: 60
+  isPracticeMode: 0
   finalScore: 0
   playerQuitEarly: 0

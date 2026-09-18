@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6650469593449337328}
   - component: {fileID: 7519687978273666280}
   - component: {fileID: 846358121428501676}
+  - component: {fileID: 8077002502934370211}
   m_Layer: 5
   m_Name: PH
   m_TagString: Untagged
@@ -75,3 +76,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8077002502934370211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5505062318889576141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22ee92098a86eb4a94a9d3eb8cde142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PuzzleID
+  id: 0
